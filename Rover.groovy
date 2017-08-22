@@ -1,26 +1,23 @@
-dirs = ['N','E','S','W']
-moves = [[x:0,y:1],[x:1,y:0],[x:0,y:-1],[x:-1,y:0]]
+rightTurn = ['N':'E','E':'S','S':'W','W':'N']
+leftTurn = ['N':'W','E':'N','S':'E','W':'S']
+moves = ['N':[x:0,y:1],'E':[x:1,y:0],'S':[x:0,y:-1],'W':[x:-1,y:0]]
 
 m = { rover ->
-    move = moves[position(rover['o'])]
+    move = moves[rover['o']]
     x = rover['x']+move['x']
     y = rover['y']+move['y']
     o = rover['o']
     return [x:x, y:y, o:o]
 }
 
-l = { rover -> 
-    o = dirs[(position(rover['o'])-1)%4]    
-    return [x:rover['x'],y:rover['y'], o:o] 
-}
-
-r = {rover ->
-    o = dirs[(position(rover['o'])+1)%4]    
+l = { rover ->
+    o = leftTurn[rover['o']]
     return [x:rover['x'],y:rover['y'], o:o]
 }
 
-position = {o ->
-    return dirs.findIndexOf{ it == o}
+r = {rover ->
+    o = rightTurn[rover['o']]
+    return [x:rover['x'],y:rover['y'], o:o]
 }
 
 process = { initialRover, instructions ->
@@ -31,7 +28,5 @@ process = { initialRover, instructions ->
 
 rover = [x:1, y:2, o:'N']
 instructions = "LMLMLMLMM".toLowerCase()
-println process(rover, instructions)
 
-
-
+assert [x:1, y:3, o:'N'] ==  process(rover, instructions)
